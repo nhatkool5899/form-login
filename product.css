@@ -174,3 +174,23 @@ body{
 .container .card:hover .contentBx a:hover{
     font-size: 18px;
 }
+
+
+
+
+
+
+form input{
+    height: 40px;
+    padding: 0 10px;
+}
+
+.message{
+    background: #fff;
+    color: red;
+    padding: 6px 14px;
+    display: none;
+}
+.message.active{
+    display: inline-block;
+}

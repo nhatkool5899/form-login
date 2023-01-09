@@ -31,6 +31,165 @@
                 <a href="#">Buy Now</a>
             </div>
         </div>
+
+        <form name="form" action="#" method="post" onsubmit="return formValidate()">
+            <div>
+                <input type="text" name="name" placeholder="name" pattern=".{4,}" required onchange="return onChangeName()">
+                <span class="message message_name"></span>
+            </div>
+            <div>
+                <input type="date" name="date" placeholder="date" id="dateOfBirth" required onchange="return onChangeDate()">
+                <span class="message message_date"></span>
+            </div>
+            <div>
+                <input type="email" name="email" placeholder="email" required onchange="return onChangeEmail()">
+                <span class="message message_email"></span>
+            </div>
+            <div>
+                <input type="password" name="password" placeholder="password" pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$" required onkeyup="return onPassword()">
+                <span class="message message_password"></span>
+            </div>
+            <div>
+                <input type="password" name="confirm_password" required onkeyup="return onConfirmPassword()">
+                <span class="message message_confirm"></span>
+            </div>
+            <input type="submit" id="submit" value="Đăng ký">
+        </form>
     </div>
+
+
+
+    <script>
+
+        let form = document.forms['form']
+        let name = form.name;
+        let email = form.email;
+        let password = form.password;
+        let confirm_password= form.confirm_password;
+
+        const message_name = document.querySelector('.message_name');
+        const message_date = document.querySelector('.message_date');
+        const message_email = document.querySelector('.message_email');
+        const message_password = document.querySelector('.message_password');
+        const message_confirm = document.querySelector('.message_confirm');
+        
+        function onChangeName(){
+            var checkName = /.{4,}/;
+            if(name.value.match(checkName)){
+                message_name.innerHTML = 'OK'
+                message_name.classList.add('active')
+                return true;
+            }else{
+                message_name.innerHTML = ('Ít nhất 4 ký tự!')
+                message_name.classList.add('active')
+                return false;
+            }
+        }
+
+        function onChangeEmail(){
+            var checkEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            if(email.value.match(checkEmail)){
+                message_email.innerHTML = 'OK'
+                message_email.classList.add('active')
+                return true;
+            }
+            else{
+                message_email.innerHTML = ('Sai định dạng!')
+                message_email.classList.add('active')
+                return false;
+            }
+        }
+
+        function onPassword(){
+            var checkPassword = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
+            if(password.value.match(checkPassword)){
+                message_password.innerHTML = 'OK'
+                message_password.classList.add('active')
+                return true;
+            }   
+            else{
+                message_password.innerHTML = ('Ít nhất 1 số, 1 chữ hoa, thường, 1 ký tự đặc biệt và tối thiểu 8 ký tự!')
+                message_password.classList.add('active')
+                return false;
+            }
+        }
+
+        function onConfirmPassword(){
+            if(confirm_password.value == password.value){
+                message_confirm.innerHTML = 'OK'
+                message_confirm.classList.add('active')
+                return true;
+            }
+            else{
+                message_confirm.innerHTML = ('Mật khẩu chưa khớp')
+                message_confirm.classList.add('active')
+                return false;
+            }
+        }
+
+        function onChangeDate(){
+            var today = new Date();
+            var date = new Date(form.date.value)
+
+            if (today.getFullYear() - date.getFullYear() > 10){
+                message_date.innerHTML = 'OK'
+                message_date.classList.add('active')
+                return true;
+            }else{
+                message_date.innerHTML = 'Phải lớn hơn 10 tuổi'
+                message_date.classList.add('active')
+                return false;
+            }
+
+            // if(today.getTime() - date.getTime() <= 0){
+            //     message_date.innerHTML = 'Ngày không hợp lệ'
+            //     essage_date.classList.add('active')
+            // }else{
+            //     message_date.innerHTML = 'OK'
+            //     message_date.classList.add('active')
+            // }
+        }
+
+        function formValidate(){
+            // if(form.name.value == ""){
+            //     form.name.focus();
+            //     return false;
+            // }
+
+            // if(form.email.value == ""){
+            //     form.email.focus();
+            //     return false;
+            // }
+
+            // if(form.date.value == ""){
+            //     form.name.focus();
+            //     return false;
+            // }
+
+            // if(form.password.value == ""){
+            //     form.name.focus();
+            //     return false;
+            // }
+
+            // if(form.confirm_password.value == ""){
+            //     form.name.focus();
+            //     return false;
+            // }
+
+            var today = new Date()
+            var date = new Date(form.date.value)
+
+            if (today.getFullYear() - date.getFullYear() < 10){
+                form.date.focus();
+                return false
+            }
+
+            var checkPassword = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
+            if(!password.value.match(checkPassword)){
+                return false;
+            }
+        }
+
+    </script>
 </body>
 </html>
