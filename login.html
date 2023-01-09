@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div class="container">
+        <form name="formLogin" action="#" method="post" onsubmit="return frmValidate()">
+
+            <h2>Password Strength Check</h2>
+            <div class="inputBox">
+                <input type="email" placeholder="Email" name="email" required>
+            </div>
+            <div class="inputBox">
+                <input type="password" placeholder="password" name="pw" id="myPassword" required pattern=".{6,}">
+                <div class="show"></div>
+            </div>
+            <input type="submit" value="OK">
+        </form>
+        <div class="strengthMeter"></div>
+
+
+        <form name="formSignUp" action="#" method="post" onsubmit="return frmSignUp()">
+
+            <h2>Đăng ký</h2>
+            <div class="inputBox">
+                <input type="text" placeholder="Tên" name="name" required onchange="return onChangeName()">
+            </div>
+            <div class="inputBox">
+                <input type="email" placeholder="Email" name="email" required onchange="return onChangeEmail()">
+            </div>
+            <div class="inputBox">
+                <input type="password" placeholder="Mật khẩu" name="password" required onkeyup="return onKeyupPassword()">
+                <div class="show"></div>
+            </div>
+            <input type="date" name="date" id="" onchange="return onChangeDate()">
+            <div class="inputBox">
+                <input type="password" placeholder="Nhập lại mật khẩu" name="rePassword" required onkeyup="return onRePassword()">
+                <div class="show"></div>
+            </div>
+            <input type="submit" value="OK">
+        </form>
+        <div class="strengthMeter"></div>
+    </div>
+
+    <script>
+
+        var accounts = '{"user" : [{"email": "admin1@gmail.com", "password": "123456"}, {"email": "admin2@gmail.com", "password": "123456"}]}';
+
+        var obj = JSON.parse(accounts);
+
+        function frmValidate() {
+            var frm = document.forms['formLogin'];
+            var email = frm.email;
+            var pw = frm.pw;
+
+            if(obj.user.length > 0){
+
+                for (let i = 0; i < obj.user.length; i++) {
+                    
+                    if(email.value == obj.user[i].email && pw.value == obj.user[i].password){
+                        alert('Đăng nhập Thành công');
+                        return;
+                    }else{
+                        alert('Sai email hoặc mật khẩu');
+                        return;
+                        
+                    }
+                }
+            }
+        }
+
+        var SignUp = document.forms['formSignUp'];
+
+        
+        function onChangeName(){
+            var name = SignUp.name;
+            console.log(name.value);
+        }
+
+        function onChangeEmail(){
+            var email = SignUp.email;
+            var mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            if (email.value.match(mailFormat))
+            {
+                console.log('dung')
+            }else{
+                console.log('sai')
+            }
+ 
+        }
+
+        function onKeyupPassword(){
+
+            var pw = SignUp.password;
+            var passwordFormat = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/;
+
+            if(pw.value.match(passwordFormat)){
+                console.log('Đúng');
+            }else{
+                console.log('Ít nhất 1 số, 1 chữ hoa, 1 chữ thường và tối thiểu 6 ký tự');
+            }
+        }
+
+        function onRePassword(){
+
+            var repw = SignUp.rePassword;
+            var password = SignUp.password;
+
+            if(repw.value == password.value){
+                console.log('Đúng');
+            }else{
+                console.log('Mật khẩu chưa khớp');
+            }
+        }
+
+        function onChangeDate(){
+            var toDate = new Date();
+            var date = new Date(SignUp.date.value);
+            if(toDate.getFullYear() - date.getFullYear() < 10){
+                console.log('chưa đủ 10 tuổi')
+            }else{
+                console.log('true');
+            }
+            if(toDate.getTime() - date.getTime() <= 0 ){
+                console.log('false');
+            }else{
+                console.log('true')
+            }
+        }
+
+        
+    </script>
+
+
+    <script>
+        function Strength(password) {
+            let i = 0;
+            if(password.length > 6){
+                i++;
+            }
+            if(password.length >= 10){
+                i++;
+            }
+            if(/[A-Z]/.test(password)){
+                i++;
+            }
+            if(/[a-z]/.test(password)){
+                i++;
+            }
+            if(/[0-9]/.test(password)){
+                i++;
+            }
+            if(/[A-Za-z0-8]/.test(password)){
+                i++;
+            }
+
+            return i;
+        }
+
+        let container = document.querySelector('.container');
+
+        document.addEventListener("keyup", function(e){
+            let pass = document.querySelector('#myPassword').value;
+            let strength = Strength(pass);
+            if(strength <= 2){
+                container.classList.add('weak');
+                container.classList.remove('medium');
+                container.classList.remove('strong');
+            }else if(strength > 2 && strength <= 4){
+                container.classList.remove('weak');
+                container.classList.add('medium');
+                container.classList.remove('strong');
+            }else{
+                container.classList.remove('weak');
+                container.classList.remove('medium');
+                container.classList.add('strong');
+            }
+        })
+
+        let password = document.querySelector('#myPassword');
+        let show = document.querySelector('.show');
+        show.onclick = function(){
+            if(password.type === 'password'){
+                password.setAttribute('type', 'text');
+                show.classList.add('hide');
+            }else{
+                password.setAttribute('type', 'password');
+                show.classList.remove('hide');
+            }
+        }
+    </script>
+</body>
+</html>
